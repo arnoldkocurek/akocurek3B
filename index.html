@@ -6,11 +6,211 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+<style>
+    *{
+        padding: 0%;
+        margin: 0%;
+    }
+#p1{
+    font-size: 4em;
+}
+#p2{
+    font-size: 1em;    
+}
+#element{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #przycisk{
+            height: 5em;
+            width: 20em;
+            background-color: greenyellow;
+            color:blue;
+        }
+
+        
+        
+        img{
+            padding: 1em;
+        }
+        #button{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 2em;
+            width: 5em;
+            background-color: greenyellow;
+            color:blue;
+            margin-left: 10em;
+        }
+        #button:hover{
+            background-color:brown;
+        }
+        #darkmode{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 2em;
+            width: 12em;
+            background-color: #292929;
+            color:white;
+            margin-left: 3em;
+        }
+        #whitemode{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 2em;
+            width: 14em;
+            background-color: white;
+            border-style: dashed;
+            margin-left: 2em;
+        }
+</style>
+
+
 <body>
     <p id="p1">Hello World!</p>
+    <p id="p2">Najedź na tekst wyżej, żeby zmienić jego kolor</p> <br>
+    <p input type="button" id="darkmode">WŁĄCZ CIEMNY TRYB</p> <br>
+    <p input type="button" id="whitemode">WŁĄCZ NORMALNY TRYB</p> <br>
+    <form>
+        Wpisz imię <input type="text" id="imie">
+        <br><br>
+        <p input type="button" id="button">Zatwierdź</p> 
+    </form>
+    
+    <p id="kobieta_czy_mezczyzna"></p>
+    <br>
+    <p id="powiadomienie"></p>
+    <br>
+    <p id="listakobiet"></p>
+    <br>
+    <br>
+    <p id="listamezczyzn"></p>
+    <br>
+    
+    <div id="element">  
+        <button id="przycisk">WYGENERUJ LOSOWE ZDJĘCIE</button>
+        <p>Aby usunąć, kliknij w zdjęcie</p>
+    </div>
+
     <script>
-        const p1 = document.getElementById("p1");
-        p1.style.color = "#f00";
+    //--------------------------Hello World!----------------------------------//
+    const p1 = document.getElementById("p1");
+    p1.addEventListener("mouseover", function(){
+    p1.style.color = "#f00";
+    })
+    p1.addEventListener("mouseout", function(){
+    p1.style.color = "#000";
+    })
+    //--------------------------DARK MODE----------------------------------//
+    const allp = document.querySelectorAll('p');
+    const whitemode = document.getElementById("whitemode");
+    const darkmode = document.getElementById("darkmode")
+    darkmode.addEventListener("click", function(){
+        document.body.style.color = "#E5E5E5";
+        document.body.style.backgroundColor = "#292929";
+        p1.style.color = "#E5E5E5"
+        p1.addEventListener("mouseout", function(){
+        p1.style.color = "#E5E5E5";
+        })
+        whitemode.style.color = "black"
+    })
+    whitemode.addEventListener("click", function(){
+        document.body.style.color = "black";
+        document.body.style.backgroundColor = "white";
+        p1.style.color = "black";
+        p1.addEventListener("mouseout", function(){
+        p1.style.color = "black";
+        })
+    })
+
+//----------------------------tworzenie i usuwanie elementów-----------------//
+    const button=document.getElementById("przycisk");
+        let liczba = 0;
+
+        button.addEventListener("mouseover", function(){
+        button.style.backgroundColor="#0f0";
+        })
+        button.addEventListener("mouseout", function(){
+        button.style.backgroundColor="greenyellow";
+        })
+
+        button.addEventListener('click', function(){;
+            
+            const element=document.createElement('p');
+        
+
+            const obrazek=document.createElement('img');
+            obrazek.setAttribute("src", `https://picsum.photos/200?random=${++liczba}`);
+            element.appendChild(obrazek);
+            
+           
+            element.addEventListener('click',function()
+            {
+                element.remove();
+            });
+
+            document.getElementById("element").appendChild(element);
+        });
+        //---------------------------------tablica------------------------//
+        let kobiety = [];
+        let meskie = [];
+       
+        
+        function zamianaimienia(){
+        
+        let name = document.getElementById("imie").value;
+        const litera = name.charAt(name.length-1);
+        const dlugoscimienia = name.length;
+        const pierwsza_duza_litera = (name.charAt(0)).toUpperCase();
+        const reszta_imienia = (name.substring(1,(name.length))).toLowerCase();
+        
+        const przerobione_imie = pierwsza_duza_litera+reszta_imienia;
+        if(dlugoscimienia < 3){
+            document.getElementById("powiadomienie").innerHTML="IMIE JEST ZA KRÓTKIE";
+            
+        }else if(litera=="a" && name!="Kuba" && name!="Jeroma"){
+            kobiety.push(przerobione_imie);
+            document.getElementById("kobieta_czy_mezczyzna").innerHTML = `Jesteś kobietą! Nazywasz się ${przerobione_imie}.`;
+        }else{
+            meskie.push(przerobione_imie);
+            document.getElementById("kobieta_czy_mezczyzna").innerHTML = `Jesteś mężczyzną! Nazywasz się ${przerobione_imie}.`;
+        }
+        document.getElementById("listakobiet").innerHTML="Lista kobiet:"+`<br>`;
+        document.getElementById("listamezczyzn").innerHTML="Lista mężczyzn:"+`<br>`;
+        kobiety.sort();
+        meskie.sort();
+        for(let i=0;i<kobiety.length;i++){
+            document.getElementById("listakobiet").innerHTML+= `${kobiety[i]}<br>`;
+        }
+
+        for(let i=0;i<meskie.length;i++){
+            
+            document.getElementById("listamezczyzn").innerHTML+= `${meskie[i]}<br>`;
+        }
+        
+    }
+
+    function reset(){
+        const form = document.querySelector("form");
+        const alert = document.getElementById('powiadomienie');
+        form.reset();
+    }
+    const przycisk=document.getElementById("button");
+    przycisk.addEventListener('click', zamianaimienia);
+    przycisk.addEventListener('click', reset);
+    
+
     </script>
+
+
+
 </body>
 </html>
